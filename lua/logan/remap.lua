@@ -4,7 +4,6 @@ local opts = { noremap = true, silent = true }
 -- leader
 vim.g.mapleader = ' '
 
-keymap('n', ':', ';')
 keymap({ 'n', 'v' }, '<Space>', '<Nop>', opts)
 
 -- ------ KEY MAPS ------
@@ -26,7 +25,7 @@ keymap('n', '<leader>pv', ':Ex <CR>', opts)
 vim.cmd('autocmd BufEnter * set formatoptions-=cro')
 vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
 
--- cetner after running a command, this is done so the sommand and center look like they run at the same time
+-- cetner after running a command, this is done so the command and center look like they run at the same time
 function execute_and_center(command, count)
   local i = 0
   if command:sub(1,1) ~= ':' then
@@ -36,25 +35,29 @@ function execute_and_center(command, count)
     i = i + 1
     vim.fn.execute(command)
   end
-  vim.fn.execute('normal! zz')
+  require('neoscroll').zz(120, [['sine']]);
 end
 
--- hate higligthing
-keymap('n', '<C-c>', '<C-c>:noh<CR>', opts)
+function setup_center_map(mode, key_binding)
+  local command = string.format(':<C-u> lua execute_and_center("%s", vim.v.count1)<CR>', key_binding)
+  keymap(mode, key_binding, command, opts)
+end
 
--- center after moving up or down, searching, many others
-keymap('n', 'j', [[:<C-u> lua execute_and_center('j', vim.v.count1)<CR>]], opts)
-keymap('n', 'k', [[:<C-u> lua execute_and_center('k', vim.v.count1)<CR>]], opts)
-keymap('v', 'j', 'jzz', opts)
+-- keep cursor in middle, and do smooth scroll
+setup_center_map('n', 'j')
+setup_center_map('n', 'k')
+keymap('v', 'j', 'jzz', opts) -- hard to mess with in normal mode 
 keymap('v', 'k', 'kzz', opts)
 
-keymap('n', 'n', 'nzz', opts)
-keymap('n', 'N', 'Nzz', opts)
-keymap('n', 'H', 'Hzz', opts)
-keymap('n', 'L', 'Lzz', opts)
-keymap('n', '<C-o>', '<C-o>zz', opts)
-keymap('n', '<C-i>', '<C-i>zz', opts)
-keymap('n', 'gd', 'gdzz')
+setup_center_map('n', 'H')
+setup_center_map('n', 'L')
+
+setup_center_map('n', 'n')
+setup_center_map('n', 'N')
+setup_center_map('n', 'N')
+setup_center_map('n', '<C-o>')
+setup_center_map('n', '<C-i>')
+setup_center_map('n', 'gd')
 
 -- do like this because we want line number, and its okay, hard to do with function
 keymap('n', 'G', 'Gzz', opts)
@@ -62,11 +65,10 @@ keymap('n', 'G', 'Gzz', opts)
 -- use alt key to move lines like in vs code
 keymap('n', '<A-h>', '<<', opts)
 keymap('n', '<A-l>', '>>', opts)
-keymap('n', '<A-j>', [[:<C-u> lua execute_and_center(':m .+1', 1)<CR>]], opts)
-keymap('n', '<A-k>', [[:<C-u> lua execute_and_center(':m .-2', 1)<CR>]], opts)
--- todo see if I can to this better
-keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", opts)
-keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", opts)
+keymap('n', '<A-k>', ':m .-2<CR>zz', opts)
+keymap('n', '<A-j>', ':m .+1<CR>zz', opts)
+keymap('v', '<A-j>', ":m '>+1<CR>gv=gvzz", opts)
+keymap('v', '<A-k>', ":m '<-2<CR>gv=gvzz", opts)
 
 -- insert new lines above and below
 keymap('n', '<S-j>', [[:<C-u> lua execute_and_center('o', vim.v.count1)<CR>]], opts)
@@ -90,7 +92,8 @@ keymap('n', 'c', '"_c', opts)
 keymap('n', '<C-d>', 'd', opts)
 keymap('v', '<C-d>', 'd', opts)
 
--- the primagen says
+-- nice mappings
+keymap('n', '<C-c>', '<C-c>:noh<CR>', opts) -- clear higlighting
 keymap('i', '<C-c>', '<Esc>', opts)
 keymap('n', 'Q', '<nop>', opts)
 keymap('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
@@ -106,7 +109,6 @@ keymap('n', '<leader><C-d>', 'diw')
 -- should be able to exit a terminal
 keymap('t', '<Esc>', '<C-\\><C-n>', opts)
 
-
 -- nice way to nativagte windows 
 local navigagte_and_size = '<C-w>100-<C-w>3+<C-w>'
 keymap('n', '<leader>wK', '<C-w>k', opts)
@@ -116,13 +118,8 @@ keymap('n', '<leader>wk', navigagte_and_size .. 'k', opts)
 keymap('n', '<leader>wl', '<C-w>l', opts)
 keymap('n', '<leader>wh', '<C-w>h', opts)
 
-keymap('n', '<leader>wd', ':split<CR>' .. navigagte_and_size .. 'j' .. ':terminal<CR>i', opts)
-keymap('n', '<leader>wr', ':vsplit<CR><C-w>l:terminal<CR>i', opts)
-
 -- for ease of use 
 keymap('n', ';', ':')
 keymap('n', ':', ';')
 keymap('n', '/', '/\\c')
-
-
 
