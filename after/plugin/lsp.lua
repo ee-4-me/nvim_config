@@ -11,8 +11,10 @@ require('mason-lspconfig').setup({
   ensure_installed = {
     'tsserver',
     'eslint',
+    'cssls',
     'lua_ls',
     'jsonls',
+    'pyright',
   },
   handlers = {
     lsp_zero.default_setup,

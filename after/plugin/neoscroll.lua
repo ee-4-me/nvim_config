@@ -3,6 +3,6 @@ require('neoscroll').setup({
 })
 
 local t = {}
-t['zz']    = {'zz', {'120', [['sine']]}}
+t['zz']    = {'zz', {'100', [['sine']]}}
 
 require('neoscroll.config').set_mappings(t)

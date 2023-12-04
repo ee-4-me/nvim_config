@@ -35,7 +35,7 @@ function execute_and_center(command, count)
     i = i + 1
     vim.fn.execute(command)
   end
-  require('neoscroll').zz(120, [['sine']]);
+  require('neoscroll').zz(20, [['sine']]);
 end
 
 function setup_center_map(mode, key_binding)
@@ -56,7 +56,7 @@ setup_center_map('n', 'n')
 setup_center_map('n', 'N')
 setup_center_map('n', 'N')
 setup_center_map('n', '<C-o>')
-setup_center_map('n', '<C-i>')
+keymap('n', '<C-i>', '<C-i>zz')
 setup_center_map('n', 'gd')
 
 -- do like this because we want line number, and its okay, hard to do with function
@@ -69,6 +69,8 @@ keymap('n', '<A-k>', ':m .-2<CR>zz', opts)
 keymap('n', '<A-j>', ':m .+1<CR>zz', opts)
 keymap('v', '<A-j>', ":m '>+1<CR>gv=gvzz", opts)
 keymap('v', '<A-k>', ":m '<-2<CR>gv=gvzz", opts)
+keymap('v', '<a-h>', '<gv', opts) -- todo make this repeatable
+keymap('v', '<a-l>', '>gv', opts)
 
 -- insert new lines above and below
 keymap('n', '<S-j>', [[:<C-u> lua execute_and_center('o', vim.v.count1)<CR>]], opts)
@@ -77,49 +79,110 @@ keymap('n', '<S-k>', 'O<Esc>', opts)
 -- hard to press underscore
 keymap('i', '<A-n>', '_<Esc>a', opts)
 
--- copy and paste to clipboard, maybe want to think about copy some more
-keymap('v', '<C-y>', '"+y', opts)
-keymap('n', '<C-y>', '"+y', opts)
-keymap('n', '<C-p>', '"+p', opts)
+-- paste in insert mode
 keymap('i', '<A-p>', '<Esc>pa', opts) -- need to use alt because C is used in lsp I think?
 
 -- delete without copy, amazing
 -- I am choosing to by default not copy when deleting, instead, need to ctrl to delete to also copy
+keymap('v', 't', '"+y', opts) -- copy to clipboard
 keymap('v', 'd', '"_d', opts)
+keymap('v', 'r', 'd', opts)
+keymap('v', '<C-d>', 'd', opts)
 keymap('n', 'd', '"_d', opts)
+keymap('n', '<C-d>', 'd', opts)
 keymap('n', 'x', '"_x', opts)
 keymap('n', 'c', '"_c', opts)
-keymap('n', '<C-d>', 'd', opts)
-keymap('v', '<C-d>', 'd', opts)
 
 -- nice mappings
-keymap('n', '<C-c>', '<C-c>:noh<CR>', opts) -- clear higlighting
+keymap('n', '<leader><enter>', ':noh<CR>', opts) -- clear higlighting
 keymap('i', '<C-c>', '<Esc>', opts)
+keymap('n', '<C-a>', 'ggVG', opts)
 keymap('n', 'Q', '<nop>', opts)
 keymap('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
 keymap('n', '<leader>f', ':/<C-r><C-w><CR>N')
 
 -- nice way to yank in word, and the replace inner word
 keymap('n', '<leader>y', 'yiw')
+keymap('n', '<leader>t', 'viw"+y', opts)
 keymap('n', '<leader>r', '"_diwP')
 keymap('n', '<leader>d', '"_diw')
 keymap('n', '<leader>c', '"_ciw')
-keymap('n', '<leader><C-d>', 'diw')
 
 -- should be able to exit a terminal
+keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', opts)
+keymap('t', '<C-j>', '<C-\\><C-n><C-w>j', opts)
+keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', opts)
+keymap('t', '<C-h>', '<C-\\><C-n><C-w>h', opts)
 keymap('t', '<Esc>', '<C-\\><C-n>', opts)
 
 -- nice way to nativagte windows 
-local navigagte_and_size = '<C-w>100-<C-w>3+<C-w>'
-keymap('n', '<leader>wK', '<C-w>k', opts)
-keymap('n', '<leader>wJ', '<C-w>j', opts)
-keymap('n', '<leader>wj', navigagte_and_size .. 'j', opts)
-keymap('n', '<leader>wk', navigagte_and_size .. 'k', opts)
-keymap('n', '<leader>wl', '<C-w>l', opts)
-keymap('n', '<leader>wh', '<C-w>h', opts)
+keymap('n', '<C-Q>', ':split<CR><C-w>j:term<CR>i', opts)
+keymap('n', '<C-k>', '<C-w>k', opts)
+keymap('n', '<C-j>', '<C-w>ji', opts)
+keymap('n', '<C-l>', '<C-w>l', opts)
+keymap('n', '<C-h>', '<C-w>h', opts)
 
 -- for ease of use 
 keymap('n', ';', ':')
 keymap('n', ':', ';')
 keymap('n', '/', '/\\c')
 
+-- todo, not a true inner, need to be way smarter, but should be good for now
+-- todo, count correct
+function select_between_delims(delim_offset)
+
+  -- Define mappings of opening and closing characters and their corresponding deletion pairs
+  local delimiters = {
+    ['('] = ')',
+    ['['] = ']',
+    ['{'] = '}',
+    ['<'] = '>',
+    ["'"] = "'",
+    ['"'] = '"',
+    ['`'] = '`',
+  }
+
+  local line = vim.fn.getline('.')
+  local cursor_index = vim.fn.col('.')
+
+  local start_pos
+  local matching_delim
+  local end_pos
+
+  -- start from cursor pos, move backwards until finding a delim
+  for i = cursor_index, 1, -1 do
+    local c = string.sub(line, i, i)
+
+    if delimiters[c] then
+      start_pos = i + delim_offset
+      matching_delim = delimiters[c]
+      break
+    end
+  end
+
+  -- didn't find an opening delim, break
+  if not start_pos then
+    return
+  end
+
+  for i = cursor_index, #line do
+    local c = string.sub(line, i, i)
+
+    if c == matching_delim then
+      end_pos = i - delim_offset
+      break
+    end
+  end
+
+  -- didn't find a closing delim, break
+  if not end_pos then
+    return
+  end
+
+  vim.fn.cursor(line, end_pos)
+
+  vim.api.nvim_input('v' .. end_pos - start_pos .. 'h')
+end
+
+keymap('n', '<leader>h', ':lua select_between_delims(0)<CR>', opts)
+keymap('n', '<leader>l', ':lua select_between_delims(1)<CR>', opts)

@@ -70,3 +70,5 @@ return require('packer').startup(function(use)
 
 end)
 
+
+-- todo is look for a way to show full file path

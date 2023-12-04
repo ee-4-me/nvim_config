@@ -7,4 +7,5 @@ vim.cmd([[highlight DiffText ctermfg=none guifg=none guibg=#154746]])
 
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+vim.api.nvim_command('highlight Comment gui=NONE')
 
