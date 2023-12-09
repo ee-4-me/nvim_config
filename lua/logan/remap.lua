@@ -10,13 +10,13 @@ keymap({ 'n', 'v' }, '<Space>', '<Nop>', opts)
 
 function source_files()
   vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\init.lua')
+  vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\lua\\logan\\set.lua')
   vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\lua\\logan\\init.lua')
   vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\lua\\logan\\remap.lua')
-  vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\lua\\logan\\set.lua')
 end
 
 -- resource
-keymap('n', '<leader><leader>', [[:lua source_files()<CR>]], opts)
+keymap('n', '<leader><leader>', [[:lua source_files()<CR>:noh<CR>]], opts)
 
 -- open file explorer
 keymap('n', '<leader>pv', ':Ex <CR>', opts)
@@ -35,7 +35,7 @@ function execute_and_center(command, count)
     i = i + 1
     vim.fn.execute(command)
   end
-  require('neoscroll').zz(20, [['sine']]);
+  vim.api.nvim_feedkeys('zz', 'n', false);
 end
 
 function setup_center_map(mode, key_binding)
@@ -86,8 +86,9 @@ keymap('i', '<A-p>', '<Esc>pa', opts) -- need to use alt because C is used in ls
 -- I am choosing to by default not copy when deleting, instead, need to ctrl to delete to also copy
 keymap('v', 't', '"+y', opts) -- copy to clipboard
 keymap('v', 'd', '"_d', opts)
+keymap('v', 'p', '"_pp', opts)
+keymap('v', 'p', '"_PP', opts)
 keymap('v', 'r', 'd', opts)
-keymap('v', '<C-d>', 'd', opts)
 keymap('n', 'd', '"_d', opts)
 keymap('n', '<C-d>', 'd', opts)
 keymap('n', 'x', '"_x', opts)
@@ -96,7 +97,7 @@ keymap('n', 'c', '"_c', opts)
 -- nice mappings
 keymap('n', '<leader><enter>', ':noh<CR>', opts) -- clear higlighting
 keymap('i', '<C-c>', '<Esc>', opts)
-keymap('n', '<C-a>', 'ggVG', opts)
+keymap('n', '<C-a>', 'ggVG')
 keymap('n', 'Q', '<nop>', opts)
 keymap('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
 keymap('n', '<leader>f', ':/<C-r><C-w><CR>N')
@@ -116,11 +117,12 @@ keymap('t', '<C-h>', '<C-\\><C-n><C-w>h', opts)
 keymap('t', '<Esc>', '<C-\\><C-n>', opts)
 
 -- nice way to nativagte windows 
-keymap('n', '<C-Q>', ':split<CR><C-w>j:term<CR>i', opts)
 keymap('n', '<C-k>', '<C-w>k', opts)
-keymap('n', '<C-j>', '<C-w>ji', opts)
+keymap('n', '<C-j>', '<C-w>j', opts)
 keymap('n', '<C-l>', '<C-w>l', opts)
 keymap('n', '<C-h>', '<C-w>h', opts)
+keymap('n', '<C-A-j>', ':split<CR><C-w>j:term<CR>', opts)
+keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
 
 -- for ease of use 
 keymap('n', ';', ':')
