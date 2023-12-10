@@ -132,6 +132,7 @@ keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
 -- for ease of use 
 keymap('n', ';', ':')
 keymap('n', ':', ';')
+keymap('n', '<leader>b', ';')
 keymap('n', '/', '/\\c')
 
 -- todo, not a true inner, need to be way smarter, but should be good for now
@@ -193,5 +194,6 @@ end
 keymap('n', '<leader>h', ':lua select_between_delims(0)<CR>', opts)
 keymap('n', '<leader>l', ':lua select_between_delims(1)<CR>', opts)
 
+keymap('v', '<leader>n', '<plug>NERDCommenterInvert', opts)
 keymap('n', '<leader>n', '<plug>NERDCommenterInvert', opts)
 keymap('n', '<leader>m', '<plug>NERDCommenterAppend<space>', opts)

@@ -5,7 +5,6 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 
 -- tabs
-
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
@@ -27,6 +26,8 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = 'C:/neovim/undodir'
 vim.opt.undofile = true
+
+vim.opt.sidescrolloff = 30
 
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
