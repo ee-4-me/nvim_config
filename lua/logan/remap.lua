@@ -29,7 +29,7 @@ vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
 function execute_and_center(command, count)
   local i = 0
   if command:sub(1,1) ~= ':' then
-    command = 'normal! ' .. command 
+    command = 'normal! ' .. command
   end
   while i < count do
     i = i + 1
@@ -108,6 +108,7 @@ keymap('n', '<leader>t', 'viw"+y', opts)
 keymap('n', '<leader>r', '"_diwP')
 keymap('n', '<leader>d', '"_diw')
 keymap('n', '<leader>c', '"_ciw')
+keymap('n', '<leader>v', 'viw')
 
 -- should be able to exit a terminal
 keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', opts)
@@ -121,6 +122,10 @@ keymap('n', '<C-k>', '<C-w>k', opts)
 keymap('n', '<C-j>', '<C-w>j', opts)
 keymap('n', '<C-l>', '<C-w>l', opts)
 keymap('n', '<C-h>', '<C-w>h', opts)
+keymap('i', '<C-k>', '<Esc><C-w>k', opts)
+keymap('i', '<C-j>', '<Esc><C-w>j', opts)
+keymap('i', '<C-l>', '<Esc><C-w>l', opts)
+keymap('i', '<C-h>', '<Esc><C-w>h', opts)
 keymap('n', '<C-A-j>', ':split<CR><C-w>j:term<CR>', opts)
 keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
 
@@ -180,7 +185,6 @@ function select_between_delims(delim_offset)
   if not end_pos then
     return
   end
-
   vim.fn.cursor(line, end_pos)
 
   vim.api.nvim_input('v' .. end_pos - start_pos .. 'h')
@@ -188,3 +192,6 @@ end
 
 keymap('n', '<leader>h', ':lua select_between_delims(0)<CR>', opts)
 keymap('n', '<leader>l', ':lua select_between_delims(1)<CR>', opts)
+
+keymap('n', '<leader>n', '<plug>NERDCommenterInvert', opts)
+keymap('n', '<leader>m', '<plug>NERDCommenterAppend<space>', opts)
