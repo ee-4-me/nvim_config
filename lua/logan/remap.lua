@@ -201,12 +201,12 @@ keymap('n', '<leader>m', '<plug>NERDCommenterInvert', opts)
 keymap('n', '<leader><S-M>', '<plug>NERDCommenterAppend<space>', opts)
 
 
-local buffer_history = {}
-local current_buffer_index = 0
+local file_history = {}
+local current_file_index = 0
 local called_back_or_forward = false
 
-function navigate_to_buffer(buffer)
-    vim.cmd('buffer ' .. buffer)
+function navigate_to_file(file_path)
+    vim.api.nvim_command("e " .. file_path)
 end
 
 function is_buffer_a_file(bufnr)
@@ -225,13 +225,14 @@ function save_to_history()
   end
 
   local current_buffer = vim.fn.bufnr()
-  if is_buffer_a_file(current_buffer) and buffer_history[#buffer_history] ~= current_buffer and buffer_history[#buffer_history - 1] ~= current_buffer then
-      -- if jumped to a new file from somewhere backwards in the buffer history, delete the old history
-      
-      remove_n_elements(buffer_history, #buffer_history - current_buffer_index)
+  local file_name = vim.api.nvim_buf_get_name(current_buffer)
 
-      table.insert(buffer_history, current_buffer)
-      current_buffer_index = current_buffer_index + 1
+  if is_buffer_a_file(current_buffer) and file_history[#file_history] ~= file_name and file_history[#file_history - 1] ~= file_name then
+      -- if jumped to a new file from somewhere backwards in the buffer history, delete the old history
+      remove_n_elements(file_history, #file_history - current_file_index)
+
+      table.insert(file_history, file_name)
+      current_file_index = current_file_index + 1
   end
     
 end
@@ -239,9 +240,9 @@ end
 function file_back()
     called_back_or_forward = true
 
-    if current_buffer_index > 2 then
-        current_buffer_index = current_buffer_index - 1
-        navigate_to_buffer(buffer_history[current_buffer_index])
+    if current_file_index > 2 then
+        current_file_index = current_file_index - 1
+        navigate_to_file(file_history[current_file_index])
         print(' ')
     else
         print("At oldest file")
@@ -251,9 +252,9 @@ end
 function file_forward()
     called_back_or_forward = true
 
-    if current_buffer_index < #buffer_history then
-        current_buffer_index = current_buffer_index + 1
-        navigate_to_buffer(buffer_history[current_buffer_index])
+    if current_file_index < #file_history then
+        current_file_index = current_file_index + 1
+        navigate_to_file(file_history[current_file_index])
         print(' ')
     else
         print("At newest file")
@@ -262,7 +263,7 @@ end
 
 -- trys to add new buffers to array when opened
 vim.cmd([[
-    augroup buffer_history
+    augroup file_history
         autocmd!
         autocmd BufEnter * lua save_to_history()
     augroup END
