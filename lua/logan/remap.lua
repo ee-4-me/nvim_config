@@ -132,7 +132,7 @@ keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
 -- for ease of use 
 keymap('n', ';', ':')
 keymap('n', ':', ';')
-keymap('n', '<leader>b', ';')
+keymap('n', '.', ';')
 keymap('n', '/', '/\\c')
 
 -- todo, not a true inner, need to be way smarter, but should be good for now
@@ -191,9 +191,90 @@ function select_between_delims(delim_offset)
   vim.api.nvim_input('v' .. end_pos - start_pos .. 'h')
 end
 
+-- todo fix this and make it smart
 keymap('n', '<leader>h', ':lua select_between_delims(0)<CR>', opts)
 keymap('n', '<leader>l', ':lua select_between_delims(1)<CR>', opts)
 
-keymap('v', '<leader>n', '<plug>NERDCommenterInvert', opts)
-keymap('n', '<leader>n', '<plug>NERDCommenterInvert', opts)
-keymap('n', '<leader>m', '<plug>NERDCommenterAppend<space>', opts)
+
+keymap('v', '<leader>m', '<plug>NERDCommenterInvert gv', opts)
+keymap('n', '<leader>m', '<plug>NERDCommenterInvert', opts)
+keymap('n', '<leader><S-M>', '<plug>NERDCommenterAppend<space>', opts)
+
+
+local buffer_history = {}
+local current_buffer_index = 0
+local called_back_or_forward = false
+
+function navigate_to_buffer(buffer)
+    vim.cmd('buffer ' .. buffer)
+end
+
+function is_buffer_a_file(bufnr)
+    -- Get the value of 'buftype' option for the buffer
+    local buftype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+
+    -- Check if buftype is not ''
+    return buftype ~= ''
+end
+
+-- called when opening a file from any means
+function save_to_history()
+  if called_back_or_forward then
+      called_back_or_forward = false
+      return
+  end
+
+  local current_buffer = vim.fn.bufnr()
+  if is_buffer_a_file(current_buffer) and buffer_history[#buffer_history] ~= current_buffer and buffer_history[#buffer_history - 1] ~= current_buffer then
+      -- if jumped to a new file from somewhere backwards in the buffer history, delete the old history
+      
+      remove_n_elements(buffer_history, #buffer_history - current_buffer_index)
+
+      table.insert(buffer_history, current_buffer)
+      current_buffer_index = current_buffer_index + 1
+  end
+    
+end
+
+function file_back()
+    called_back_or_forward = true
+
+    if current_buffer_index > 2 then
+        current_buffer_index = current_buffer_index - 1
+        navigate_to_buffer(buffer_history[current_buffer_index])
+        print(' ')
+    else
+        print("At oldest file")
+    end
+end
+
+function file_forward()
+    called_back_or_forward = true
+
+    if current_buffer_index < #buffer_history then
+        current_buffer_index = current_buffer_index + 1
+        navigate_to_buffer(buffer_history[current_buffer_index])
+        print(' ')
+    else
+        print("At newest file")
+    end
+end
+
+-- trys to add new buffers to array when opened
+vim.cmd([[
+    augroup buffer_history
+        autocmd!
+        autocmd BufEnter * lua save_to_history()
+    augroup END
+]])
+
+function remove_n_elements(a, n)
+    for i = 1, n, 1 do
+        table.remove(a) -- pop
+    end
+end
+
+
+keymap('n', '<S-M>', ':lua file_forward()<CR>', opts)
+keymap('n', 'm', ':lua file_back()<CR>', opts)
+
