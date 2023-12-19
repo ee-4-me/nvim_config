@@ -1,6 +1,7 @@
 
 vim.cmd([[
   autocmd FileType typescript,typescriptreact,javascript inoremap <buffer> <C-l> console.log();<Left><Left>
+  autocmd FileType typescript,typescriptreact,javascript inoremap <buffer> <C-e> console.error();<Left><Left>
 ]])
 
 vim.cmd([[
