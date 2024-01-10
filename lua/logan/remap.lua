@@ -1,7 +1,7 @@
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- leader
+-- leader, space
 vim.g.mapleader = ' '
 
 keymap({ 'n', 'v' }, '<Space>', '<Nop>', opts)
@@ -15,7 +15,7 @@ function source_files()
   vim.cmd('source C:\\Users\\luedtkel\\AppData\\Local\\nvim\\lua\\logan\\remap.lua')
 end
 
--- resource
+-- refresh
 keymap('n', '<leader><leader>', [[:lua source_files()<CR>:noh<CR>]], opts)
 
 -- open file explorer
@@ -25,41 +25,25 @@ keymap('n', '<leader>pv', ':Ex <CR>', opts)
 vim.cmd('autocmd BufEnter * set formatoptions-=cro')
 vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
 
--- cetner after running a command, this is done so the command and center look like they run at the same time
-function execute_and_center(command, count)
-  local i = 0
-  if command:sub(1,1) ~= ':' then
-    command = 'normal! ' .. command
-  end
-  while i < count do
-    i = i + 1
-    vim.fn.execute(command)
-  end
-  vim.api.nvim_feedkeys('zz', 'n', false);
-end
-
-function setup_center_map(mode, key_binding)
-  local command = string.format(':<C-u> lua execute_and_center("%s", vim.v.count1)<CR>', key_binding)
-  keymap(mode, key_binding, command, opts)
-end
-
--- keep cursor in middle, and do smooth scroll
-setup_center_map('n', 'j')
-setup_center_map('n', 'k')
-keymap('v', 'j', 'jzz', opts) -- hard to mess with in normal mode 
+-- keep cursor in middle
+keymap('n', 'j', 'jzz', opts)
+keymap('n', 'k', 'kzz', opts)
+keymap('v', 'j', 'jzz', opts)
 keymap('v', 'k', 'kzz', opts)
+keymap('n', 'zj', '5jzz', opts)
+keymap('n', 'zk', '5kzz', opts)
 
-setup_center_map('n', 'H')
-setup_center_map('n', 'L')
+keymap('v', 'H', 'Hzz', opts)
+keymap('v', 'L', 'Lzz', opts)
+keymap('n', 'H', 'Hzz', opts)
+keymap('n', 'L', 'Lzz', opts)
 
-setup_center_map('n', 'n')
-setup_center_map('n', 'N')
-setup_center_map('n', 'N')
-setup_center_map('n', '<C-o>')
-keymap('n', '<C-i>', '<C-i>zz')
-keymap('n', 'gd', 'gd :lua save_to_history(true)<CR>', opts)
+keymap('n', 'n', 'nzz', opts)
+keymap('n', 'N', 'Nzz', opts)
+keymap('n', '<C-o>', '<C-o>zz', opts)
+keymap('n', '<C-i>', '<C-i>zz', opts)
+keymap('n', 'gd', 'gdzz', opts)
 
--- do like this because we want line number, and its okay, hard to do with function
 keymap('n', 'G', 'Gzz', opts)
 
 -- use alt key to move lines like in vs code
@@ -73,7 +57,7 @@ keymap('v', '<a-h>', '<gv', opts) -- todo make this repeatable
 keymap('v', '<a-l>', '>gv', opts)
 
 -- insert new lines above and below
-keymap('n', '<S-j>', [[:<C-u> lua execute_and_center('o', vim.v.count1)<CR>]], opts)
+keymap('n', '<S-j>', 'o<Esc>zz', opts)
 keymap('n', '<S-k>', 'O<Esc>', opts)
 
 -- hard to press underscore
@@ -100,15 +84,15 @@ keymap('i', '<C-c>', '<Esc>', opts)
 keymap('n', '<C-a>', 'ggVG')
 keymap('n', 'Q', '<nop>', opts)
 keymap('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>')
-keymap('n', '<leader>f', ':/<C-r><C-w><CR>N')
+keymap('n', '<leader>f', ':/<C-r><C-w><CR>N', opts)
 
 -- nice way to yank in word, and the replace inner word
-keymap('n', '<leader>y', 'yiw')
+keymap('n', '<leader>y', 'yiw', opts)
 keymap('n', '<leader>t', 'viw"+y', opts)
-keymap('n', '<leader>r', '"_diwP')
-keymap('n', '<leader>d', '"_diw')
-keymap('n', '<leader>c', '"_ciw')
-keymap('n', '<leader>v', 'viw')
+keymap('n', '<leader>r', '"_diwP', opts)
+keymap('n', '<leader>d', '"_diw', opts)
+keymap('n', '<leader>c', '"_ciw', opts)
+keymap('n', '<leader>v', 'viw', opts)
 
 -- should be able to exit a terminal
 keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', opts)
@@ -133,10 +117,11 @@ keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
 -- for ease of use 
 keymap('n', ';', ':')
 keymap('n', ':', ';')
-keymap('n', '.', ';')
+keymap('n', '.', ';', opts)
 keymap('n', '/', '/\\c')
 
+-- comments
 keymap('v', '<leader>m', '<plug>NERDCommenterToggle gv', opts)
 keymap('n', '<leader>m', '<plug>NERDCommenterToggle', opts)
-keymap('n', '<leader><S-M>', '<plug>NERDCommenterAppend<space>', opts)
+keymap('n', '<leader>,', '<plug>NERDCommenterAppend<space>', opts)
 
