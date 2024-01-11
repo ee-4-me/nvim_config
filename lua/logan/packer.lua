@@ -57,6 +57,12 @@ return require('packer').startup(function(use)
       config = function() require("nvim-autopairs").setup {} end
   }
 
+  -- close div tags and such in html, react
+  use {
+    "windwp/nvim-ts-autotag",
+      config = function() require("nvim-ts-autotag").setup {} end
+  }
+
   -- multiple cursors
   use({'mg979/vim-visual-multi', branch = 'master'})
 
