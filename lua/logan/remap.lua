@@ -123,5 +123,11 @@ keymap('n', '/', '/\\c')
 -- comments
 keymap('v', '<leader>m', '<plug>NERDCommenterToggle gv', opts)
 keymap('n', '<leader>m', '<plug>NERDCommenterToggle', opts)
-keymap('n', '<leader>,', '<plug>NERDCommenterAppend<space>', opts)
+keymap('n', '<leader>,', '<plug>NERDCommenterAppend', opts)
 
+-- spectre, amazing package doing find and replace a lot like vscode
+keymap('n', '<leader>si', '<cmd>lua require("spectre").toggle()<CR>i')
+keymap('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>')
+keymap('n', '<leader>sr', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>')
+keymap('v', '<leader>sr', '<esc><cmd>lua require("spectre").open_visual()<CR>')
+keymap('n', '<leader>sf', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>')

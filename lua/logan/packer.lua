@@ -95,5 +95,8 @@ return require('packer').startup(function(use)
     },
   })
 
+  -- for nice search like vs code
+  use('nvim-pack/nvim-spectre')
+
 end)
 
