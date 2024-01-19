@@ -126,8 +126,47 @@ keymap('n', '<leader>m', '<plug>NERDCommenterToggle', opts)
 keymap('n', '<leader>,', '<plug>NERDCommenterAppend', opts)
 
 -- spectre, amazing package doing find and replace a lot like vscode
-keymap('n', '<leader>si', '<cmd>lua require("spectre").toggle()<CR>i')
-keymap('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>')
-keymap('n', '<leader>sr', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>')
-keymap('v', '<leader>sr', '<esc><cmd>lua require("spectre").open_visual()<CR>')
-keymap('n', '<leader>sf', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>')
+keymap('n', '<leader>si', '<cmd>lua require("spectre").toggle()<CR>i', opts)
+keymap('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>', opts)
+keymap('n', '<leader>sr', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', opts)
+keymap('v', '<leader>sr', '<esc><cmd>lua require("spectre").open_visual()<CR>', opts)
+keymap('n', '<leader>sf', '<cmd>lua require("spectre").open_file_search()<CR>', opts)
+
+
+-- barbar keymaps, like this, maybe more than harpoon, sorry prime
+
+-- Move to previous/next
+keymap('n', '<A-,>', '<Cmd>BufferPrevious<CR>', opts)
+keymap('n', '<A-.>', '<Cmd>BufferNext<CR>', opts)
+
+-- Re-order to previous/next
+keymap('n', '<A-<>', '<Cmd>BufferMovePrevious<CR>', opts)
+keymap('n', '<A->>', '<Cmd>BufferMoveNext<CR>', opts)
+
+-- Goto buffer in position...
+keymap('n', '<A-1>', '<Cmd>BufferGoto 1<CR>', opts)
+keymap('n', '<A-2>', '<Cmd>BufferGoto 2<CR>', opts)
+keymap('n', '<A-3>', '<Cmd>BufferGoto 3<CR>', opts)
+keymap('n', '<A-4>', '<Cmd>BufferGoto 4<CR>', opts)
+keymap('n', '<A-5>', '<Cmd>BufferGoto 5<CR>', opts)
+keymap('n', '<A-6>', '<Cmd>BufferGoto 6<CR>', opts)
+keymap('n', '<A-7>', '<Cmd>BufferGoto 7<CR>', opts)
+keymap('n', '<A-8>', '<Cmd>BufferGoto 8<CR>', opts)
+keymap('n', '<A-9>', '<Cmd>BufferGoto 9<CR>', opts)
+keymap('n', '<A-0>', '<Cmd>BufferLast<CR>', opts)
+
+-- Pin/unpin buffer
+keymap('n', '<A-p>', '<Cmd>BufferPin<CR>', opts)
+-- Close buffer
+keymap('n', '<A-c>', '<Cmd>BufferClose<CR>', opts)
+keymap('n', '<A-d>', '<Cmd>BufferCloseAllButCurrentOrPinned<CR>', opts)
+
+-- Wipeout buffer
+--                 :BufferWipeout
+-- Close commands
+--                 :BufferCloseAllButCurrent
+--                 :BufferCloseAllButPinned
+--                 :BufferCloseAllButCurrentOrPinned
+--                 :BufferCloseBuffersLeft
+--                 :BufferCloseBuffersRight
+

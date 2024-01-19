@@ -8,8 +8,11 @@ return require('packer').startup(function(use)
   -- adds git commands with :G
   use('tpope/vim-fugitive')
 
-  -- gotta know who to blame (it was me)
+  --gotta know who to blame (it was me)
   use('f-person/git-blame.nvim')
+
+  -- git status on left side, amazing
+  use('lewis6991/gitsigns.nvim')
 
   -- git view difference between files
   use('sindrets/diffview.nvim')
@@ -27,7 +30,7 @@ return require('packer').startup(function(use)
   -- file helper -- TODO should learn how to use this better
   use('ThePrimeagen/harpoon')
 
-  -- maginc
+  -- magic
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
 
   -- really nice, can see undo / redo history in a tree
@@ -97,6 +100,9 @@ return require('packer').startup(function(use)
 
   -- for nice search like vs code
   use('nvim-pack/nvim-spectre')
+
+  -- for the tab manager like vscode, amazing
+  use('romgrk/barbar.nvim')
 
 end)
 
