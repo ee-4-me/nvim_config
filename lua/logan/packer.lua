@@ -18,7 +18,6 @@ return require('packer').startup(function(use)
   use('sindrets/diffview.nvim')
 
   -- fuzzy finder for files, searching all files, etc
-  -- TODO really like C-S-f in vscode, search for plugin that does that better
   use({
     'nvim-telescope/telescope.nvim', tag = '0.1.4',
     requires = { {'nvim-lua/plenary.nvim'} }
@@ -103,6 +102,9 @@ return require('packer').startup(function(use)
 
   -- for the tab manager like vscode, amazing
   use('romgrk/barbar.nvim')
+
+  -- session manager, keeps file / state open
+  use('tpope/vim-obsession')
 
 end)
 

@@ -1,5 +1,17 @@
 -- ------ SYSTEM SETTINGS ------
 
+-- Set specific settings for Python files
+vim.cmd([[
+  autocmd FileType python
+    \ setlocal tabstop=4 |
+    \ setlocal softtabstop=4 |
+    \ setlocal shiftwidth=4
+]])
+
+-- disables enter comment on new line, thank goodness
+vim.cmd('autocmd BufEnter * set formatoptions-=cro')
+vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
+
 -- line numbers
 vim.wo.number = true
 vim.wo.relativenumber = true
@@ -10,14 +22,6 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = false
-
--- Set specific settings for Python files
-vim.cmd([[
-  autocmd FileType python
-    \ setlocal tabstop=4 |
-    \ setlocal softtabstop=4 |
-    \ setlocal shiftwidth=4
-]])
 
 vim.opt.wrap = false
 vim.opt.synmaxcol=300
