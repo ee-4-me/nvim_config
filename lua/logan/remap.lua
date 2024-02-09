@@ -115,16 +115,15 @@ keymap('n', '<A-d>', '<Cmd>BufferCloseAllButCurrentOrPinned<CR>', opts) -- close
 -- ########## LEADER ##########
 
 keymap('n', '<leader><leader>', [[:lua source_files()<CR>:noh<CR>]], opts) -- refresh
-keymap('n', '<leader>pv', ':Ex <CR>', opts) -- open file explorer
 
 
 keymap('n', '<leader><enter>', ':noh<CR>', opts) -- clear higlighting
-keymap('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>') -- search and replace in file over word
-keymap('n', '<leader>f', ':/<C-r><C-w><CR>N', opts) -- search in file over word
+keymap('n', '<leader>ss', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>') -- search and replace in file over word
+keymap('n', '<leader>ff', ':/<C-r><C-w><CR>N', opts) -- search in file over word
 
 -- inner words, don't copy when deleting or changing
 keymap('n', '<leader>y', 'yiw', opts)
-keymap('n', '<leader>t', 'viw"+y', opts)
+keymap('n', '<leader>tt', 'viw"+y', opts)
 keymap('n', '<leader>r', '"_diwP', opts)
 keymap('n', '<leader>d', '"_diw', opts)
 keymap('n', '<leader>c', '"_ciw', opts)
@@ -134,9 +133,15 @@ keymap('n', '<leader>v', 'viw', opts)
 keymap('v', '<leader>m', '<plug>NERDCommenterToggle gv', opts)
 keymap('n', '<leader>m', '<plug>NERDCommenterToggle', opts)
 keymap('n', '<leader>,', '<plug>NERDCommenterAppend', opts)
+vim.g.NERDCustomDelimiters = {
+  c = {
+    left = '// ',
+  }
+}
 
 -- spectre, amazing package doing find and replace a lot like vscode
-keymap('n', '<leader>ss', '<cmd>lua require("spectre").toggle()<CR>i', opts)
+keymap('n', '<leader>so', '<cmd>lua require("spectre").toggle()<CR>i', opts) -- open
+keymap('n', '<leader>sc', '<cmd>lua require("spectre").toggle()<CR>', opts) -- close
 keymap('n', '<leader>sr', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', opts)
 keymap('v', '<leader>sr', '<esc><cmd>lua require("spectre").open_visual()<CR>', opts)
 keymap('n', '<leader>sf', '<cmd>lua require("spectre").open_file_search()<CR>', opts)
@@ -159,6 +164,8 @@ keymap('i', '<A-b>', '<Esc>bi', opts)
 keymap('i', '<A-S-L>', '<Esc>A', opts)
 keymap('i', '<A-S-H>', '<Esc>I', opts)
 
+keymap('i', '<A-p>', '<Esc>pa', opts)
+
 keymap('n', '<C-a>', 'ggVG', opts) -- select all
 
 keymap('n', 'Q', '<nop>', opts) -- disable ex mode
@@ -180,8 +187,8 @@ keymap('n', '/', '/\\c')
 
 -- ########## GIT FUGITIVE ########## 
 
-keymap('n', '<leader>gd', ':DiffviewOpen<CR>', opts)
-keymap('n', '<leader>gg', ':DiffviewClose<CR>', opts)
+keymap('n', '<leader>go', ':DiffviewOpen<CR>', opts)
+keymap('n', '<leader>gc', ':DiffviewClose<CR>', opts)
 
 
 
@@ -189,8 +196,9 @@ keymap('n', '<leader>gg', ':DiffviewClose<CR>', opts)
 
 local telescope_builtin = require('telescope.builtin')
 
-keymap('n', '<leader>pf', telescope_builtin.find_files, opts)
-keymap('n', '<leader>ps', telescope_builtin.live_grep, opts)
+keymap('n', '<leader>to', telescope_builtin.find_files, opts)
+keymap('n', '<leader>ts', telescope_builtin.live_grep, opts)
+keymap('n', '<leader>po', ':Ex <CR>', opts) -- open file explorer
 
 
 
