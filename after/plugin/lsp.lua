@@ -13,6 +13,7 @@ require('mason-lspconfig').setup({
     'lua_ls',
     'jsonls',
     'pyright',
+    'clangd',
   },
   handlers = {
     lsp_zero.default_setup,

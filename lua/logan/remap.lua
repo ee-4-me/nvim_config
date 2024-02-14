@@ -32,8 +32,10 @@ keymap('n', 'n', 'nzz', opts)
 keymap('n', 'N', 'Nzz', opts)
 keymap('n', '<C-o>', '<C-o>zz', opts)
 keymap('n', '<C-i>', '<C-i>zz', opts)
-keymap('n', 'gd', 'gdzz', opts)
+keymap('n', 'gd', 'gdzz', opts) -- idk if this is working
 keymap('n', 'G', 'Gzz', opts)
+keymap('n', 'u', 'uzz', opts)
+keymap('n', '<C-r>', '<C-r>zz', opts)
 
 
 
@@ -153,7 +155,7 @@ keymap('n', '<leader>sf', '<cmd>lua require("spectre").open_file_search()<CR>', 
 keymap('n', '<S-j>', 'o<Esc>zz', opts) -- insert new lines above and below, I love this
 keymap('n', '<S-k>', 'O<Esc>', opts)
 
-keymap('i', '<A-u>', '_<Esc>a', opts) -- easy underscore, I like snake case
+keymap('i', '<A-n>', '_<Esc>a', opts) -- easy underscore, I like snake case
 
 keymap('i', '<A-l>', '<Esc>la', opts) -- navigate in insert mode, nice
 keymap('i', '<A-h>', '<Esc>ha', opts)
