@@ -5,9 +5,6 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use('wbthomason/packer.nvim')
 
-  -- adds git commands with :G
-  use('tpope/vim-fugitive')
-
   --gotta know who to blame (it was me)
   use('f-person/git-blame.nvim')
 
@@ -103,8 +100,16 @@ return require('packer').startup(function(use)
   -- for the tab manager like vscode, amazing
   use('romgrk/barbar.nvim')
 
+  -- love Tim Pope
+
   -- session manager, keeps file / state open
   use('tpope/vim-obsession')
+
+  -- adds git commands with :G
+  use('tpope/vim-fugitive')
+
+  -- adds git commands with :G
+  use('tpope/vim-surround')
 
 end)
 

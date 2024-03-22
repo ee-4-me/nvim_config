@@ -84,6 +84,10 @@ keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', opts) -- moving in terminal
 keymap('t', '<C-j>', '<C-\\><C-n><C-w>j', opts)
 keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', opts)
 keymap('t', '<C-h>', '<C-\\><C-n><C-w>h', opts)
+keymap('t', '<C-Down>', '<C-\\><C-n><C-w>k', opts) -- moving in terminal
+keymap('t', '<C-Up>', '<C-\\><C-n><C-w>j', opts)
+keymap('t', '<C-Left>', '<C-\\><C-n><C-w>h', opts)
+keymap('t', '<C-Right>', '<C-\\><C-n><C-w>l', opts)
 keymap('t', '<Esc>', '<C-\\><C-n>', opts) -- exit terminal
 
 
@@ -140,6 +144,13 @@ vim.g.NERDCustomDelimiters = {
     left = '// ',
   }
 }
+
+-- tpope surround is awesome
+keymap('n', '<leader>nc', '<plug>Csurround', opts)
+keymap('n', '<leader>nd', '<plug>Dsurround', opts)
+keymap('n', '<leader>ni', '<plug>Ysurroundiw', opts)
+keymap('n', '<leader>na', '<plug>Yssurround', opts)
+--xmap S   <Plug>VSurround // V then S then <> for html stuff, no leader here
 
 -- spectre, amazing package doing find and replace a lot like vscode
 keymap('n', '<leader>so', '<cmd>lua require("spectre").toggle()<CR>i', opts) -- open
