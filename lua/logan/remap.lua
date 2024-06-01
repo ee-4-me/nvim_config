@@ -78,8 +78,8 @@ keymap('i', '<C-k>', '<Esc><C-w>k', opts) -- moving in insert
 keymap('i', '<C-j>', '<Esc><C-w>j', opts)
 keymap('i', '<C-l>', '<Esc><C-w>l', opts)
 keymap('i', '<C-h>', '<Esc><C-w>h', opts)
-keymap('n', '<C-A-j>', ':split<CR><C-w>j:term<CR>', opts) -- open terminal to left or down -- kinda like
-keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l:term<CR>', opts)
+keymap('n', '<C-A-j>', ':split<CR><C-w>j<CR>', opts)
+keymap('n', '<C-A-l>', ':vsplit<CR><C-w>l<CR>', opts)
 keymap('t', '<C-k>', '<C-\\><C-n><C-w>k', opts) -- moving in terminal
 keymap('t', '<C-j>', '<C-\\><C-n><C-w>j', opts)
 keymap('t', '<C-l>', '<C-\\><C-n><C-w>l', opts)
